@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <title>Operatii</title>
+</head>
+
+<body>
+    <h1>Operatii matematice</h1>
+    <ul>
+        {% for item in dictionar.lista %}
+            <li>
+                {% if item.operatie == "suma" %}
+                    {{ item.a }} + {{ item.b }} = {{ item.rezultat }}
+                {% elif item.operatie == "diferenta" %}
+                    {{ item.a }} - {{ item.b }} = {{ item.rezultat }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

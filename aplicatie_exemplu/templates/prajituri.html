@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <title>Lista Prajituri</title>
+</head>
+<body>
+    <h1>Lista Prăjituri</h1>
+    <ul>
+        {% for prajitura in prajituri %}
+            <li>
+                <strong>{{ pizza.nume }}</strong><br>
+                Descriere: {{ pizza.descriere }}<br>
+                Preț: {{ pizza.pret }} RON<br>
+                Gramaj: {{ pizza.gramaj }}g<br>
+                Calorii: {{ pizza.calorii }}<br>
+                Data adăugare: {{ prajitura.data_adaugare }}
+            </li>
+        {% empty %}
+            <li>Nu există prăjituri disponibile.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

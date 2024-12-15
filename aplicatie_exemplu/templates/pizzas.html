@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista Pizzelor</title>
+</head>
+<body>
+    <header>
+        <h1>Lista Pizzelor</h1>
+    </header>
+
+    <div>
+        <form method="get">
+            {{ form.as_p }}
+            <button type="submit">Filtrează</button>
+        </form>
+
+        <ul>
+            {% for pizza in pizze %}
+                <li>
+                    <h2>{{ pizza.nume }}</h2>
+                    <p>{{ pizza.descriere }}</p>
+                    <p><strong>Preț:</strong> {{ pizza.pret }} RON</p>
+                    <p><strong>Gramaj:</strong> {{ pizza.gramaj }}g</p>
+                </li>
+            {% empty %}
+                <p>Nicio pizza găsită!</p>
+            {% endfor %}
+        </ul>
+        
+
+        <div>
+            {% if pizze.has_other_pages %}
+                <div>
+                    {% if pizze.has_previous %}
+                        <a href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Prima pagină</a>
+                        <a href="?page={{ pizze.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Pagina anterioară</a>
+                    {% endif %}
+        
+                    <span>Pagina {{ pizze.number }} din {{ pizze.paginator.num_pages }}</span>
+        
+                    {% if pizze.has_next %}
+                        <a href="?page={{ pizze.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Pagina următoare</a>
+                        <a href="?page={{ pizze.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Ultima pagină</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        
+    </div>
+</body>
+</html>

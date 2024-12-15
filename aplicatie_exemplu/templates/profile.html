@@ -1,0 +1,11 @@
+<h1>Profil utilizator</h1>
+<ul>
+    <li><strong>Username:</strong> {{ username }}</li>
+    <li><strong>Email:</strong> {{ email }}</li>
+    <li><strong>Telefon:</strong> {{ telefon }}</li>
+    <li><strong>Data nașterii:</strong> {{ data_nasterii }}</li>
+    <li><strong>Adresa:</strong> {{ adresa }}</li>
+    <li><strong>Oraș:</strong> {{ oras }}</li>
+</ul>
+
+<a href="{% url 'password_change' %}">Schimba parola</a>
