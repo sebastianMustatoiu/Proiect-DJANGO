@@ -41,6 +41,57 @@ INSTALLED_APPS = [
     'aplicatie_exemplu.apps.AplicatieExempluConfig',
 ]
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587 
+EMAIL_USE_TLS = True 
+EMAIL_HOST_USER = 'sebim5764@gmail.com'
+EMAIL_HOST_PASSWORD = 'zxvgyenoydatovon'
+DEFAULT_FROM_EMAIL = 'Da-Boss <sebim5764@gmail.com>'
+
+
+ADMINS = [
+    ('Admin1', 'sebim5764@gmail.com'),
+    ('Admin2', 'sebim5764@gmail.com')
+]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'errors.log',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'aplicatie_exemplu': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

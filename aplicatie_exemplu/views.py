@@ -2,7 +2,7 @@ import re
 import os
 import json
 from django.contrib.auth import logout
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from datetime import datetime
 from django.core.paginator import Paginator
@@ -10,6 +10,8 @@ from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from .models import CustomUser
 
 
 from .models import Locatie, Prajitura, Pizza, CustomUser
@@ -20,6 +22,7 @@ accesari = 0
 valori_t = []
 
 def index(request):
+    trimite_email()
     return HttpResponse("Primul raspuns")
 
 
@@ -275,3 +278,30 @@ def profile_view(request):
         'oras': request.session['oras'],
     }
     return render(request, 'profile.html', context)
+
+
+def trimite_email():
+    send_mail(
+        subject='Salutare!',
+        message='Salut. Ce mai faci?',
+        html_message='<h1>Salut</h1><p>Ce mai faci?</p>',
+        from_email='sebim5764@gmail.com',
+        recipient_list=['sebim5764@gmail.com'],
+        fail_silently=False,
+    )
+
+def confirma_mail(request, cod):
+    try:
+        user = CustomUser.objects.get(cod=cod)
+        if user.email_confirmat:
+            mesaj = "Emailul a fost deja confirmat."
+        else:
+            user.email_confirmat = True
+            user.cod = None
+            user.save()
+            mesaj = "Felicitari! Emailul tau a fost confirmat cu succes."
+
+    except CustomUser.DoesNotExist:
+        mesaj = "Codul de confirmare este invalid sau a expirat."
+
+    return render(request, 'confirmare_email.html', {'mesaj': mesaj})

@@ -142,6 +142,8 @@ class CustomUser(AbstractUser):
     adresa = models.CharField(max_length=255, blank=True)
     oras = models.CharField(max_length=100, blank=True)
     newsletter = models.BooleanField(default=False)
+    cod = models.CharField(max_length=100, null=True, blank=True, unique=True)
+    email_confirmat = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username

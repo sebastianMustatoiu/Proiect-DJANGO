@@ -7,6 +7,9 @@ from django import forms
 from .models import CustomUser
 import re
 import datetime
+import uuid
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
 
 
 
@@ -142,6 +145,38 @@ class PizzaForm(forms.ModelForm):
             raise ValidationError("Numarul de calorii nu poate fi negativ.")
         return calorii
     
+'''def trimite_mail():
+    context = {'nume': 'Ionel'}  
+    html_content = render_to_string('email_template.html', context)
+
+    email = EmailMessage(
+        subject='Salutare!',
+        body=html_content,
+        from_email='sebim5764@gmail.com',
+        to=['sebim5764@gmail.com'],
+    )
+    email.content_subtype = 'html'
+    email.send(fail_silently=False)'''
+    
+def trimite_mail_confirmare(user):
+    cod_confirmare = user.cod
+    context = {
+        'username': user.username,  
+        'oras': user.oras,
+        'link_confirmare': f"http://localhost:8000/aplicatie_exemplu/confirma_mail/{user.cod}"
+    }
+    html_content = render_to_string('email_template.html', context)
+    email = EmailMessage(
+        subject='Confirmare inregistrare',
+        body=html_content,
+        from_email='sebim5764@gmail.com',
+        to=[user.email],
+    )
+    email.content_subtype = 'html'
+    email.send(fail_silently=False)
+
+
+    
 class CustomUserCreationForm(UserCreationForm):
     telefon = forms.CharField(required=True)
     data_nasterii = forms.DateField(required=True, widget = forms.DateInput(attrs={'type': 'date'}),)
@@ -175,7 +210,7 @@ class CustomUserCreationForm(UserCreationForm):
     def clean_oras(self):
         oras = self.cleaned_data.get('oras')
         if not re.match(r'^[a-zA-Z\s\-]+$', oras):
-            raise ValidationError("Numele orașului poate conține doar litere, spații și cratime.")
+            raise ValidationError("Numele orasului poate contine doar litere, spatii si cratime.")
         return oras
 
         
@@ -186,7 +221,9 @@ class CustomUserCreationForm(UserCreationForm):
         user.adresa = self.cleaned_data["adresa"]
         user.oras = self.cleaned_data["oras"]
         user.newsletter = self.cleaned_data["newsletter"]
+        user.cod = str(uuid.uuid4())
         if commit:
+            trimite_mail_confirmare(user)
             user.save()
         return user
 
@@ -196,8 +233,11 @@ class CustomAuthenticationForm(AuthenticationForm):
         initial=False,
         label='Ramaneti logat'
     )
-
-    def clean(self):        
-        cleaned_data = super().clean()
-        ramane_logat = self.cleaned_data.get('ramane_logat')
-        return cleaned_data
+    
+    def confirm_login_allowed(self, user):
+        if not user.email_confirmat:
+            raise ValidationError(
+                "Emailul nu a fost confirmat. Te rugam sa confirmi adresa de email.",
+                code='email_not_confirmed',
+            )
+        super().confirm_login_allowed(user)

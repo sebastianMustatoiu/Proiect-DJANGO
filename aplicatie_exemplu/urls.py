@@ -30,5 +30,6 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('password_change/', auth_views.PasswordChangeView.as_view(template_name='password_change.html'), name='password_change'),
     path('password_change_done/', auth_views.PasswordChangeDoneView.as_view(template_name='password_change_done.html'), name='password_change_done'),
+    path('confirma_mail/<str:cod>/', views.confirma_mail, name='confirma_mail'),
 
 ]
