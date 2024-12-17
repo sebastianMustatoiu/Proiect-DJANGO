@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista Promotiilor</title>
+</head>
+<body>
+    <h1>Promoțiile curente</h1>
+    <ul>
+        {% for promotie in promotii %}
+            <li>
+                <strong>{{ promotie.nume }}</strong><br>
+                Discount: {{ promotie.discount }}%<br>
+                Valabil pana la: {{ promotie.data_expirare }}<br>
+                Detalii: {{ promotie.mesaj_personalizat }}
+            </li>
+        {% empty %}
+            <p>Nu exista promotii active in acest moment.</p>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'adauga_promotie' %}">Adauga o promotie</a>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Detalii Pizza</title>
+</head>
+<body>
+    <h1>Detalii Pizza</h1>
+    <p><strong>Nume:</strong> {{ pizza.nume }}</p>
+    <p><strong>Descriere:</strong> {{ pizza.descriere }}</p>
+    <p><strong>Pret:</strong> {{ pizza.pret }} RON</p>
+    <p><strong>Gramaj:</strong> {{ pizza.gramaj }} g</p>
+    <p><strong>Meniu:</strong> {{ pizza.meniu }}</p>
+    <p><strong>Ingrediente:</strong></p>
+    <ul>
+        {% for ingredient in pizza.ingrediente.all %}
+            <li>{{ ingredient.nume }} ({{ ingredient.calorii }} calorii)</li>
+        {% empty %}
+            <li>Nu exista ingrediente pentru aceasta pizza.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'lista_pizze' %}">Inapoi la lista</a>
+</body>
+</html>

@@ -1,6 +1,9 @@
 from django.db import models
 import uuid
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
+from datetime import datetime, timedelta
+
 
 class Organizator(models.Model):
     nume = models.CharField(max_length=100)
@@ -147,6 +150,26 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+
+class Vizualizari(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    produs = models.ForeignKey('Pizza', on_delete=models.CASCADE)
+    data_vizualizare = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-data_vizualizare']
+        
+class Promotie(models.Model):
+    nume = models.CharField(max_length=100)
+    data_creare = models.DateTimeField(auto_now_add=True)
+    data_expirare = models.DateTimeField()
+    meniu = models.ManyToManyField('Meniu', related_name='promotii')
+    discount = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    mesaj_personalizat = models.TextField()
+
+    def __str__(self):
+        return f"{self.nume} - expira la {self.data_expirare}"
 
 
     

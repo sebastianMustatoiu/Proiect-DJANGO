@@ -5,17 +5,20 @@ from django.contrib.auth import logout
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from datetime import datetime
+from django.utils import timezone
 from django.core.paginator import Paginator
 from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from .models import CustomUser
-
+from .models import CustomUser, Vizualizari, Pizza, Promotie
+from django.core.mail import send_mass_mail
+from django.db.models import Count
+from django.db import models
 
 from .models import Locatie, Prajitura, Pizza, CustomUser
-from .forms import PizzaFilterForm, ContactForm, PizzaForm, CustomUserCreationForm, CustomAuthenticationForm
+from .forms import PizzaFilterForm, ContactForm, PizzaForm, CustomUserCreationForm, CustomAuthenticationForm, PromotieForm
 
 
 accesari = 0
@@ -305,3 +308,60 @@ def confirma_mail(request, cod):
         mesaj = "Codul de confirmare este invalid sau a expirat."
 
     return render(request, 'confirmare_email.html', {'mesaj': mesaj})
+
+MAX_VIZUALIZARI = 5
+K_VIZUALIZARI = 2
+
+def adauga_vizualizare(user, produs):
+    Vizualizari.objects.create(user=user, produs=produs)
+
+    vizualizari = Vizualizari.objects.filter(user=user).order_by('-data_vizualizare')
+    if vizualizari.count() > MAX_VIZUALIZARI:
+        vizualizari.last().delete()
+        
+def adauga_promotie(request):
+    if request.method == 'POST':
+        form = PromotieForm(request.POST)
+        if form.is_valid():
+            promotie = form.save()
+
+            meniuri_selectate = form.cleaned_data['meniu']
+
+            utilizatori = CustomUser.objects.annotate(
+                vizualizari_count=Count('vizualizari', filter=models.Q(
+                    vizualizari__produs__meniu__in=meniuri_selectate
+                ))
+            ).filter(vizualizari_count__gte=K_VIZUALIZARI, newsletter=True).distinct()
+
+            mailuri = []
+            for user in utilizatori:
+                mesaj_html = render_to_string('email_promotie.html', {
+                    'nume': user.username,
+                    'nume_promotie': promotie.nume,
+                    'data_expirare': promotie.data_expirare,
+                    'discount': promotie.discount,
+                    'mesaj_personalizat': promotie.mesaj_personalizat,
+                })
+                mesaj = (
+                    f"Promoție: {promotie.nume}",
+                    mesaj_html,
+                    'sebim5764@gmail.com',
+                    [user.email],
+                )
+                mailuri.append(mesaj)
+
+            send_mass_mail(mailuri, fail_silently=False)
+            return redirect('lista_promotii')
+    else:
+        form = PromotieForm()
+    return render(request, 'adauga_promotie.html', {'form': form})
+
+def lista_promotii(request):
+    promotii = Promotie.objects.all()
+    return render(request, 'lista_promotii.html', {'promotii': promotii})
+
+@login_required
+def detalii_pizza(request, id):
+    pizza = get_object_or_404(Pizza, id=id)
+    adauga_vizualizare(request.user, pizza)
+    return render(request, 'detalii_pizza.html', {'pizza': pizza})

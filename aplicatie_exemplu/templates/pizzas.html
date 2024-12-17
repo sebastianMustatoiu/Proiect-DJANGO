@@ -18,12 +18,14 @@
 
         <ul>
             {% for pizza in pizze %}
-                <li>
-                    <h2>{{ pizza.nume }}</h2>
-                    <p>{{ pizza.descriere }}</p>
-                    <p><strong>Preț:</strong> {{ pizza.pret }} RON</p>
-                    <p><strong>Gramaj:</strong> {{ pizza.gramaj }}g</p>
-                </li>
+            <li>
+                <h2>
+                    <a href="{% url 'detalii_pizza' pizza.id %}">{{ pizza.nume }}</a>
+                </h2>
+                <p>{{ pizza.descriere }}</p>
+                <p><strong>Preț:</strong> {{ pizza.pret }} RON</p>
+                <p><strong>Gramaj:</strong> {{ pizza.gramaj }}g</p>
+            </li>
             {% empty %}
                 <p>Nicio pizza găsită!</p>
             {% endfor %}

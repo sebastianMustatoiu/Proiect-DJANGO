@@ -10,6 +10,8 @@ import datetime
 import uuid
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
+from .models import Promotie
+
 
 
 
@@ -241,3 +243,24 @@ class CustomAuthenticationForm(AuthenticationForm):
                 code='email_not_confirmed',
             )
         super().confirm_login_allowed(user)
+
+class PromotieForm(forms.ModelForm):
+    meniu = forms.ModelMultipleChoiceField(
+        queryset=Meniu.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label="Selecteaza meniurile pentru promotie"
+    )
+    data_expirare = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        label="Data expirarii"
+    )
+
+    class Meta:
+        model = Promotie
+        fields = ['nume', 'data_expirare', 'meniu', 'discount', 'mesaj_personalizat']
+
+    def clean_data_expirare(self):
+        data_expirare = self.cleaned_data.get('data_expirare')
+        if data_expirare and data_expirare < datetime.date.today():
+            raise ValidationError("Data de expirare nu poate fi în trecut.")
+        return data_expirare

@@ -31,5 +31,8 @@ urlpatterns = [
     path('password_change/', auth_views.PasswordChangeView.as_view(template_name='password_change.html'), name='password_change'),
     path('password_change_done/', auth_views.PasswordChangeDoneView.as_view(template_name='password_change_done.html'), name='password_change_done'),
     path('confirma_mail/<str:cod>/', views.confirma_mail, name='confirma_mail'),
+    path("adauga_promotie/", views.adauga_promotie, name="adauga_promotie"),
+    path("promotii/", views.lista_promotii, name="lista_promotii"),
+    path('pizza/<int:id>/', views.detalii_pizza, name='detalii_pizza'),
 
 ]
