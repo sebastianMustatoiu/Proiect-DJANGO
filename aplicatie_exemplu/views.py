@@ -10,15 +10,20 @@ from django.core.paginator import Paginator
 from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+from django.contrib.auth.signals import user_login_failed
+from django.dispatch import receiver
+from django.utils.timezone import now
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from .models import CustomUser, Vizualizari, Pizza, Promotie
-from django.core.mail import send_mass_mail
+from django.core.mail import send_mass_mail, mail_admins
 from django.db.models import Count
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.dateformat import format
+import time
 import locale
+import logging
 
 
 
@@ -362,7 +367,7 @@ def adauga_promotie(request):
                 )
                 mailuri.append(mesaj)
 
-            send_mass_mail(mailuri, fail_silently=False)
+            send_mass_mail(mailuri, fail_silently=True)
 
             return redirect('lista_promotii')
     else:
@@ -379,3 +384,56 @@ def detalii_pizza(request, id):
     pizza = get_object_or_404(Pizza, id=id)
     adauga_vizualizare(request.user, pizza)
     return render(request, 'detalii_pizza.html', {'pizza': pizza})
+
+FAILED_ATTEMPTS = {}
+
+@receiver(user_login_failed)
+
+def handle_failed_login(sender, credentials, request, **kwargs):
+    username = credentials.get('username', '<unknown>')
+    ip = request.META.get('REMOTE_ADDR', 'IP necunoscut')
+    current_time = time.time()
+
+    if username not in FAILED_ATTEMPTS:
+        FAILED_ATTEMPTS[username] = []
+
+    FAILED_ATTEMPTS[username].append(current_time)
+
+    FAILED_ATTEMPTS[username] = [
+        t for t in FAILED_ATTEMPTS[username] if current_time - t < 120
+    ]
+
+    if len(FAILED_ATTEMPTS[username]) >= 3:
+        mail_admins(
+            subject='Logari suspecte',
+            message=f'Username: {username}\nIP: {ip}\n3 incercari esuate in mai putin de 2 minute.',
+            html_message=f'''
+                <h1 style="color: red;">Logari suspecte</h1>
+                <p><strong>Username:</strong> {username}</p>
+                <p><strong>IP:</strong> {ip}</p>
+                <p>Au fost detectate 3 încercari esuate in mai putin de 2 minute.</p>
+            ''',
+            fail_silently=False
+        )
+        FAILED_ATTEMPTS[username] = []
+        
+def exemplu_cu_eroare():
+    try:
+        rezultat = 10 / 0
+    except Exception as e:
+        mail_admins(
+            subject="Eroare critica in functia exemplu_cu_eroare",
+            message=f"A aparut o eroare: {str(e)}",
+            html_message=f"""
+            <div style="background-color: red; color: white; padding: 20px;">
+                <h1 style="color: yellow;">Eroare în aplicație</h1>
+                <p><strong>Detalii eroare:</strong> {str(e)}</p>
+            </div>
+            """,
+            fail_silently=False
+        )
+        raise
+    
+def test_eroare(request):
+    exemplu_cu_eroare()
+    return HttpResponse("Verifica mail-ul pentru eroare!")

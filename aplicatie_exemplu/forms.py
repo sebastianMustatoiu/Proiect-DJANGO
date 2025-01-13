@@ -9,8 +9,9 @@ import re
 import datetime
 import uuid
 from django.template.loader import render_to_string
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, mail_admins
 from .models import Promotie
+
 
 
 
@@ -193,6 +194,24 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = ("username","email", "telefon", "data_nasterii", "adresa", "oras", "newsletter", "password1", "password2")
+        
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if username.lower() == "admin":
+            email = self.cleaned_data.get("email", "<email necunoscut>")
+            
+            mail_admins(
+                subject="Cineva incearca sa ne preia site-ul",
+                message=f"Un utilizator a incercat sa se inregistreze cu username-ul 'admin'. Adresa de email: {email}.",
+                html_message=f"""
+                <h1 style="color: red;">Cineva incearca sa ne preia site-ul</h1>
+                <p><strong>Username:</strong> admin</p>
+                <p><strong>Email:</strong> {email}</p>
+                """,
+                fail_silently=False
+            )
+            raise ValidationError("Nu este permis sa va inregistrati cu username-ul 'admin'.")
+        return username
         
     def clean_telefon(self):
         telefon = self.cleaned_data.get('telefon')

@@ -53,7 +53,7 @@ DEFAULT_FROM_EMAIL = 'Da-Boss <sebim5764@gmail.com>'
 
 ADMINS = [
     ('Admin1', 'sebim5764@gmail.com'),
-    ('Admin2', 'sebim5764@gmail.com')
+    ('Admin2', 'sebic.ms@gmail.com')
 ]
 
 LOGGING = {
