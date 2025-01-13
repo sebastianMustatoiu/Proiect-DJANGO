@@ -35,5 +35,6 @@ urlpatterns = [
     path("promotii/", views.lista_promotii, name="lista_promotii"),
     path('pizza/<int:id>/', views.detalii_pizza, name='detalii_pizza'),
     path('test-eroare/', views.test_eroare, name='test_eroare'),
+    path('test-logging/', views.test_logging, name='test_logging'),
 
 ]

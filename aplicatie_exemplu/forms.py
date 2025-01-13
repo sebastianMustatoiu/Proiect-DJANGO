@@ -11,6 +11,9 @@ import uuid
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage, mail_admins
 from .models import Promotie
+import logging
+
+logger = logging.getLogger('django')
 
 
 
@@ -257,6 +260,9 @@ class CustomAuthenticationForm(AuthenticationForm):
     
     def confirm_login_allowed(self, user):
         if not user.email_confirmat:
+            
+            logger.warning("Utilizatorul %s nu și-a confirmat emailul.", user.username)
+
             raise ValidationError(
                 "Emailul nu a fost confirmat. Te rugam sa confirmi adresa de email.",
                 code='email_not_confirmed',

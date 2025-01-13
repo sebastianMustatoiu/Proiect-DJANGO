@@ -70,26 +70,70 @@ LOGGING = {
         },
     },
     'handlers': {
-        'console': {
-            'level': 'DEBUG',
+        'console_warning': {
+            'level': 'WARNING',
             'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'console_error': {
+            'level': 'ERROR',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'console_critical': {
+            'level': 'CRITICAL',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'file_debug': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
             'formatter': 'verbose',
         },
-        'file': {
+        'file_info': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'info.log',
+            'formatter': 'verbose',
+        },
+        'file_warning': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': 'warning.log',
+            'formatter': 'verbose',
+        },
+        'file_error': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': 'errors.log',
-            'formatter': 'simple',
+            'filename': 'error.log',
+            'formatter': 'verbose',
+        },
+        'file_critical': {
+            'level': 'CRITICAL',
+            'class': 'logging.FileHandler',
+            'filename': 'critical.log',
+            'formatter': 'verbose',
         },
     },
     'loggers': {
-        'aplicatie_exemplu': {
-            'handlers': ['console', 'file'],
+        'django': {
+            'handlers': [
+                'console_warning',
+                'console_error',
+                'console_critical',
+                'file_debug',
+                'file_info',
+                'file_warning',
+                'file_error',
+                'file_critical',
+            ],
             'level': 'DEBUG',
             'propagate': True,
         },
     },
 }
+
 
 
 MIDDLEWARE = [

@@ -1,0 +1,47 @@
+INFO 2025-01-13 22:39:55,774 autoreload Watching for file changes with StatReloader
+INFO 2025-01-13 22:40:04,827 basehttp "GET /aplicatie_exemplu/lista_pizze/ HTTP/1.1" 200 4031
+INFO 2025-01-13 22:40:06,606 basehttp "GET /aplicatie_exemplu/lista_pizze/ HTTP/1.1" 200 4031
+INFO 2025-01-13 22:40:12,146 basehttp "GET /aplicatie_exemplu/test-logging HTTP/1.1" 301 0
+INFO 2025-01-13 22:40:12,154 views Un utilizator a accesat pagina test_logging.
+ERROR 2025-01-13 22:40:12,452 views Alt mesaj ERROR pentru debugging.
+CRITICAL 2025-01-13 22:40:12,506 views Alt mesaj CRITICAL pentru incidente majore.
+INFO 2025-01-13 22:40:12,506 basehttp "GET /aplicatie_exemplu/test-logging/ HTTP/1.1" 200 40
+INFO 2025-01-13 22:44:06,871 autoreload C:\Users\SIM\Desktop\DJANGO\Proiect1\aplicatie_exemplu\views.py changed, reloading.
+INFO 2025-01-13 22:44:07,980 autoreload Watching for file changes with StatReloader
+INFO 2025-01-13 22:44:13,490 basehttp "GET /aplicatie_exemplu/lista_pizze/ HTTP/1.1" 200 4031
+INFO 2025-01-13 22:47:30,858 basehttp "GET /aplicatie_exemplu/lista_pizze/ HTTP/1.1" 200 4031
+INFO 2025-01-13 22:49:57,318 autoreload C:\Users\SIM\Desktop\DJANGO\Proiect1\aplicatie_exemplu\views.py changed, reloading.
+INFO 2025-01-13 22:49:58,334 autoreload Watching for file changes with StatReloader
+INFO 2025-01-13 22:50:03,799 basehttp "GET /aplicatie_exemplu/lista_pizze/ HTTP/1.1" 200 4031
+INFO 2025-01-13 22:51:16,410 autoreload C:\Users\SIM\Desktop\DJANGO\Proiect1\aplicatie_exemplu\views.py changed, reloading.
+INFO 2025-01-13 22:51:17,378 autoreload Watching for file changes with StatReloader
+INFO 2025-01-13 22:53:45,652 autoreload C:\Users\SIM\Desktop\DJANGO\Proiect1\aplicatie_exemplu\views.py changed, reloading.
+INFO 2025-01-13 22:53:46,566 autoreload Watching for file changes with StatReloader
+INFO 2025-01-13 22:53:47,507 basehttp "GET /aplicatie_exemplu/lista_pizze/ HTTP/1.1" 200 4031
+INFO 2025-01-13 22:53:49,647 basehttp "GET /aplicatie_exemplu/lista_pizze/ HTTP/1.1" 200 4031
+INFO 2025-01-13 22:53:54,427 basehttp "GET /aplicatie_exemplu/profile/ HTTP/1.1" 302 0
+WARNING 2025-01-13 22:53:54,467 log Not Found: /accounts/login/
+WARNING 2025-01-13 22:53:54,467 basehttp "GET /accounts/login/?next=/aplicatie_exemplu/profile/ HTTP/1.1" 404 2569
+INFO 2025-01-13 22:53:54,853 basehttp "GET /aplicatie_exemplu/profile/ HTTP/1.1" 302 0
+WARNING 2025-01-13 22:53:54,876 log Not Found: /accounts/login/
+WARNING 2025-01-13 22:53:54,876 basehttp "GET /accounts/login/?next=/aplicatie_exemplu/profile/ HTTP/1.1" 404 2569
+INFO 2025-01-13 22:54:20,981 basehttp "GET /aplicatie_exemplu/inregistrare HTTP/1.1" 200 1758
+INFO 2025-01-13 22:54:27,606 basehttp "GET /aplicatie_exemplu/adauga_promotie/ HTTP/1.1" 200 1399
+INFO 2025-01-13 22:54:32,388 basehttp "GET /aplicatie_exemplu/profile/ HTTP/1.1" 302 0
+WARNING 2025-01-13 22:54:32,411 log Not Found: /accounts/login/
+WARNING 2025-01-13 22:54:32,411 basehttp "GET /accounts/login/?next=/aplicatie_exemplu/profile/ HTTP/1.1" 404 2569
+INFO 2025-01-13 22:54:33,175 basehttp "GET /aplicatie_exemplu/profile/ HTTP/1.1" 302 0
+WARNING 2025-01-13 22:54:33,208 log Not Found: /accounts/login/
+WARNING 2025-01-13 22:54:33,208 basehttp "GET /accounts/login/?next=/aplicatie_exemplu/profile/ HTTP/1.1" 404 2569
+INFO 2025-01-13 22:56:11,522 basehttp "GET /aplicatie_exemplu/lista_pizze/ HTTP/1.1" 200 4031
+INFO 2025-01-13 22:56:50,760 autoreload C:\Users\SIM\Desktop\DJANGO\Proiect1\aplicatie_exemplu\views.py changed, reloading.
+INFO 2025-01-13 22:56:51,574 autoreload Watching for file changes with StatReloader
+INFO 2025-01-13 23:04:36,020 autoreload C:\Users\SIM\Desktop\DJANGO\Proiect1\aplicatie_exemplu\forms.py changed, reloading.
+INFO 2025-01-13 23:04:37,215 autoreload Watching for file changes with StatReloader
+INFO 2025-01-13 23:04:42,007 basehttp "GET /aplicatie_exemplu/pizza/2/ HTTP/1.1" 302 0
+WARNING 2025-01-13 23:04:42,024 log Not Found: /accounts/login/
+WARNING 2025-01-13 23:04:42,024 basehttp "GET /accounts/login/?next=/aplicatie_exemplu/pizza/2/ HTTP/1.1" 404 2569
+INFO 2025-01-13 23:04:48,163 basehttp "GET /aplicatie_exemplu/lista_pizze/?page=2 HTTP/1.1" 200 2937
+INFO 2025-01-13 23:04:51,329 basehttp "GET /aplicatie_exemplu/lista_pizze/?page=1 HTTP/1.1" 200 4031
+INFO 2025-01-13 23:04:54,889 basehttp "GET /aplicatie_exemplu/lista_pizze/?page=2 HTTP/1.1" 200 2937
+INFO 2025-01-13 23:04:57,059 basehttp "GET /aplicatie_exemplu/lista_pizze/?page=1 HTTP/1.1" 200 4031

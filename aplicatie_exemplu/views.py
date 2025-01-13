@@ -25,6 +25,9 @@ import time
 import locale
 import logging
 
+logger = logging.getLogger('django')
+
+
 
 
 from .models import Locatie, Prajitura, Pizza, CustomUser
@@ -154,6 +157,9 @@ def lista_prajituri(request):
 
 
 def lista_pizze(request):
+    
+    logger.debug("Se preiau toate pizzele din baza de date.")
+
     pizze = Pizza.objects.all()
     form = PizzaFilterForm(request.GET)
 
@@ -237,6 +243,8 @@ def adauga_pizza(request):
             return redirect('lista_pizze')
     else:
         form = PizzaForm()
+        
+    logger.debug("O nouă pizza a fost adăugată: %s", pizza.nume)
 
     return render(request, 'adaugare_pizza.html', {'form': form})
 
@@ -248,9 +256,13 @@ def register_view(request):
             return redirect('login')
     else:
         form = CustomUserCreationForm()
+        
+    logger.info("Utilizatorul %s a fost înregistrat cu succes.", form.cleaned_data['username'])
+
     return render(request, 'inregistrare.html', {'form': form})
 
 def home(request):
+    logger.info("Pagina Home a fost accesată.")
     return HttpResponse("Acasa!")
 
 def custom_login_view(request):
@@ -323,6 +335,10 @@ MAX_VIZUALIZARI = 5
 K_VIZUALIZARI = 2
 
 def adauga_vizualizare(user, produs):
+    if not user.is_authenticated:
+        logger.error("O vizualizare a fost încercată fără utilizator autentificat.")
+        return
+    
     Vizualizari.objects.create(user=user, produs=produs)
 
     vizualizari = Vizualizari.objects.filter(user=user).order_by('-data_vizualizare')
@@ -368,6 +384,9 @@ def adauga_promotie(request):
                 mailuri.append(mesaj)
 
             send_mass_mail(mailuri, fail_silently=True)
+            
+            if promotie.data_expirare - timezone.now().date() < timedelta(days=3):
+                logger.warning("Promoția %s este aproape de expirare.", promotie.nume)
 
             return redirect('lista_promotii')
     else:
@@ -381,7 +400,11 @@ def lista_promotii(request):
 
 @login_required
 def detalii_pizza(request, id):
-    pizza = get_object_or_404(Pizza, id=id)
+    try:
+        pizza = get_object_or_404(Pizza, id=id)
+    except Exception:
+        logger.error("Pizza cu ID-ul %s nu a fost găsită.", id)
+        raise
     adauga_vizualizare(request.user, pizza)
     return render(request, 'detalii_pizza.html', {'pizza': pizza})
 
@@ -437,3 +460,27 @@ def exemplu_cu_eroare():
 def test_eroare(request):
     exemplu_cu_eroare()
     return HttpResponse("Verifica mail-ul pentru eroare!")
+
+def test_logging(request):
+    logger.debug("Acesta este un mesaj DEBUG pentru depanare.")
+    logger.debug("Mesaj DEBUG suplimentar pentru verificare.")
+    
+    logger.info("Un utilizator a accesat pagina test_logging.")
+    logger.info("Alt mesaj INFO pentru activități normale.")
+
+    logger.warning("Aceasta este o avertizare legată de performanță.")
+    logger.warning("Alt mesaj WARNING pentru atenționare.")
+
+    try:
+        1 / 0 
+    except ZeroDivisionError as e:
+        logger.error("A apărut o eroare: %s", e)
+        logger.error("Alt mesaj ERROR pentru debugging.")
+
+    try:
+        raise RuntimeError("Exemplu de eroare CRITICAL.")
+    except RuntimeError as e:
+        logger.critical("A apărut o problemă critică: %s", e)
+        logger.critical("Alt mesaj CRITICAL pentru incidente majore.")
+
+    return HttpResponse("Verifică fișierele de log și consola!")

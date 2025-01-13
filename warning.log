@@ -1,0 +1,12 @@
+ERROR 2025-01-13 22:40:12,452 views Alt mesaj ERROR pentru debugging.
+CRITICAL 2025-01-13 22:40:12,506 views Alt mesaj CRITICAL pentru incidente majore.
+WARNING 2025-01-13 22:53:54,467 log Not Found: /accounts/login/
+WARNING 2025-01-13 22:53:54,467 basehttp "GET /accounts/login/?next=/aplicatie_exemplu/profile/ HTTP/1.1" 404 2569
+WARNING 2025-01-13 22:53:54,876 log Not Found: /accounts/login/
+WARNING 2025-01-13 22:53:54,876 basehttp "GET /accounts/login/?next=/aplicatie_exemplu/profile/ HTTP/1.1" 404 2569
+WARNING 2025-01-13 22:54:32,411 log Not Found: /accounts/login/
+WARNING 2025-01-13 22:54:32,411 basehttp "GET /accounts/login/?next=/aplicatie_exemplu/profile/ HTTP/1.1" 404 2569
+WARNING 2025-01-13 22:54:33,208 log Not Found: /accounts/login/
+WARNING 2025-01-13 22:54:33,208 basehttp "GET /accounts/login/?next=/aplicatie_exemplu/profile/ HTTP/1.1" 404 2569
+WARNING 2025-01-13 23:04:42,024 log Not Found: /accounts/login/
+WARNING 2025-01-13 23:04:42,024 basehttp "GET /accounts/login/?next=/aplicatie_exemplu/pizza/2/ HTTP/1.1" 404 2569
