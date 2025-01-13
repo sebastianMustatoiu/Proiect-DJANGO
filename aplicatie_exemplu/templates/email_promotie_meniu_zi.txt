@@ -1,0 +1,11 @@
+Salut, {{ nume }}!
+
+Avem o promotie speciala pentru tine:
+{{ nume_promotie }}
+
+Detalii promotie:
+{{ mesaj_personalizat }}
+
+Reducere: {{ discount }}%
+
+Oferta este valabila pana la: {{ data_expirare }}

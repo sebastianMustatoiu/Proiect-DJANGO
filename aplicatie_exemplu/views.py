@@ -16,6 +16,11 @@ from .models import CustomUser, Vizualizari, Pizza, Promotie
 from django.core.mail import send_mass_mail
 from django.db.models import Count
 from django.db import models
+from django.template.loader import render_to_string
+from django.utils.dateformat import format
+import locale
+
+
 
 from .models import Locatie, Prajitura, Pizza, CustomUser
 from .forms import PizzaFilterForm, ContactForm, PizzaForm, CustomUserCreationForm, CustomAuthenticationForm, PromotieForm
@@ -316,6 +321,7 @@ def adauga_vizualizare(user, produs):
     Vizualizari.objects.create(user=user, produs=produs)
 
     vizualizari = Vizualizari.objects.filter(user=user).order_by('-data_vizualizare')
+    
     if vizualizari.count() > MAX_VIZUALIZARI:
         vizualizari.last().delete()
         
@@ -331,30 +337,38 @@ def adauga_promotie(request):
                 vizualizari_count=Count('vizualizari', filter=models.Q(
                     vizualizari__produs__meniu__in=meniuri_selectate
                 ))
-            ).filter(vizualizari_count__gte=K_VIZUALIZARI, newsletter=True).distinct()
+            ).filter(vizualizari_count__gte=K_VIZUALIZARI).distinct()
 
             mailuri = []
             for user in utilizatori:
-                mesaj_html = render_to_string('email_promotie.html', {
+                if 'Meniu de Zi' in meniuri_selectate.values_list('nume', flat=True):
+                    template_name = 'email_promotie_meniu_zi.txt'
+                else:
+                    template_name = 'email_promotie_meniu_seara.txt'
+
+                mesaj_text = render_to_string(template_name, {
                     'nume': user.username,
                     'nume_promotie': promotie.nume,
-                    'data_expirare': promotie.data_expirare,
+                    'data_expirare': promotie.data_expirare.strftime('%d %B %Y'),
                     'discount': promotie.discount,
                     'mesaj_personalizat': promotie.mesaj_personalizat,
                 })
+
                 mesaj = (
                     f"Promoție: {promotie.nume}",
-                    mesaj_html,
+                    mesaj_text,
                     'sebim5764@gmail.com',
                     [user.email],
                 )
                 mailuri.append(mesaj)
 
             send_mass_mail(mailuri, fail_silently=False)
+
             return redirect('lista_promotii')
     else:
         form = PromotieForm()
     return render(request, 'adauga_promotie.html', {'form': form})
+
 
 def lista_promotii(request):
     promotii = Promotie.objects.all()
